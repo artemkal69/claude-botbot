@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#171923">
+  <title>Claude Market — информация и соглашение</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: var(--tg-theme-bg-color, #f3f4f7);
+      --card: var(--tg-theme-secondary-bg-color, #fff);
+      --text: var(--tg-theme-text-color, #20232c);
+      --muted: var(--tg-theme-hint-color, #737b8c);
+      --accent: var(--tg-theme-button-color, #5865f2);
+      --accent-text: var(--tg-theme-button-text-color, #fff);
+      --line: rgba(127, 135, 150, .22);
+      --warn-bg: rgba(226, 164, 44, .13);
+      --warn: #b87912;
+      --success-bg: rgba(35, 165, 105, .12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap {
+      width: min(100%, 680px);
+      margin: 0 auto;
+      padding: 22px 16px calc(30px + env(safe-area-inset-bottom));
+    }
+    .topline { display: flex; align-items: center; gap: 11px; margin-bottom: 20px; }
+    .mark {
+      width: 44px; height: 44px; border-radius: 14px; display: grid;
+      place-items: center; background: var(--accent); color: var(--accent-text);
+      font-size: 21px; font-weight: 800; flex: none;
+    }
+    .eyebrow { color: var(--muted); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+    .brand { font-size: 15px; font-weight: 700; margin-top: 3px; }
+    h1 { font-size: 26px; line-height: 1.13; letter-spacing: -.55px; margin: 0 0 9px; }
+    .lead { font-size: 14px; line-height: 1.55; color: var(--muted); margin: 0 0 17px; }
+    .demo-notice {
+      background: var(--warn-bg); border: 1px solid rgba(184,121,18,.25);
+      border-radius: 15px; padding: 13px 14px; margin: 0 0 17px;
+      font-size: 12.5px; line-height: 1.5;
+    }
+    .demo-notice strong { color: var(--warn); }
+    .tabs {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+      background: var(--card); border: 1px solid var(--line); border-radius: 15px;
+      padding: 5px; margin: 0 0 14px;
+    }
+    .tab {
+      border: 0; border-radius: 11px; padding: 11px 8px; background: transparent;
+      color: var(--muted); font-size: 13px; font-weight: 650; cursor: pointer;
+    }
+    .tab.active { background: var(--accent); color: var(--accent-text); }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .card {
+      background: var(--card); border: 1px solid var(--line); border-radius: 17px;
+      padding: 16px 15px; margin: 11px 0;
+    }
+    .card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .icon {
+      width: 34px; height: 34px; border-radius: 11px; display: grid;
+      place-items: center; background: var(--bg); font-size: 17px; flex: none;
+    }
+    h2 { font-size: 16px; margin: 0; }
+    h3 { font-size: 14px; line-height: 1.4; margin: 16px 0 7px; }
+    p, li { font-size: 13px; line-height: 1.58; }
+    p { margin: 8px 0; }
+    ul { margin: 7px 0 0; padding-left: 19px; }
+    li { margin: 5px 0; }
+    .muted { color: var(--muted); }
+    .term-date { color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .term-section { padding: 4px 0 12px; border-bottom: 1px solid var(--line); }
+    .term-section:last-child { border-bottom: 0; padding-bottom: 0; }
+    .term-section h3 { margin-top: 13px; }
+    .term-section p { margin: 6px 0; }
+    .term-section ul { margin: 5px 0 7px; }
+    .check {
+      display: flex; align-items: flex-start; gap: 11px; padding: 14px;
+      border: 1px solid var(--line); border-radius: 15px; background: var(--card);
+      margin-top: 17px; cursor: pointer;
+    }
+    .check input { width: 19px; height: 19px; margin: 1px 0 0; accent-color: var(--accent); flex: none; }
+    .check span { font-size: 12.5px; line-height: 1.5; }
+    .actions { display: grid; gap: 9px; margin-top: 12px; }
+    button.action {
+      width: 100%; border: 0; border-radius: 14px; padding: 14px 16px;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+    }
+    #accept { background: var(--accent); color: var(--accent-text); }
+    #accept:disabled { opacity: .42; cursor: not-allowed; }
+    #close { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+    #status { min-height: 18px; text-align: center; color: var(--muted); font-size: 12px; margin-top: 10px; }
+    .footer { text-align: center; color: var(--muted); font-size: 11px; line-height: 1.5; margin-top: 18px; }
+    .callout { background: var(--success-bg); border-radius: 12px; padding: 11px 12px; margin-top: 12px; }
+    @media (min-width: 560px) { .wrap { padding-left: 22px; padding-right: 22px; } }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="topline">
+      <div class="mark">i</div>
+      <div>
+        <div class="eyebrow">Информация перед продолжением</div>
+        <div class="brand">Claude Market · учебный макет</div>
+      </div>
+    </header>
+
+    <h1>Информация и пользовательское соглашение</h1>
+    <p class="lead">Откройте оба раздела и ознакомьтесь с содержанием. Для учебной демонстрации отметка не создаёт юридически значимого договора.</p>
+
+    <div class="demo-notice">
+      <strong>Важно: демонстрационный интерфейс.</strong><br>
+      Этот Mini App подготовлен для учебного доклада. Он не принимает оплату, не продаёт аккаунты и не передаёт действующие учётные данные. Пользовательское соглашение ниже показано как предоставленный образец текста.
+    </div>
+
+    <nav class="tabs" aria-label="Разделы">
+      <button class="tab active" id="tab-info" type="button" aria-selected="true">ℹ️ Информация</button>
+      <button class="tab" id="tab-agreement" type="button" aria-selected="false">📄 Пользовательское соглашение</button>
+    </nav>
+
+    <section class="panel active" id="panel-info">
+      <div class="card">
+        <div class="card-head"><div class="icon">⚠️</div><h2>Важная информация о гарантии</h2></div>
+        <p><b>Отсутствие 100% гарантии.</b> Нельзя гарантировать, что доступ к стороннему сервису сохранится в будущем. Администрация платформы может менять правила, алгоритмы и меры безопасности, а также ограничивать или блокировать учётные записи.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div class="icon">👤</div><h2>Ответственность пользователя</h2></div>
+        <p>Пользователь должен самостоятельно знакомиться с правилами стороннего сервиса и соблюдать их. Передача или использование чужой учётной записи может противоречить этим правилам и повлечь потерю доступа.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div class="icon">🛡️</div><h2>Ограничение ответственности продавца</h2></div>
+        <p>Заявление продавца о том, что он отвечает только за доступ в момент передачи, само по себе не подтверждает законность передачи аккаунта и не гарантирует дальнейшую работу учётной записи.</p>
+        <p>Формулировка об отказе от ответственности или возврата не означает автоматически, что такие ограничения применимы во всех ситуациях. Права пользователя и обязательные требования законодательства могут зависеть от обстоятельств и применимых правил.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div class="icon">🔎</div><h2>Что важно проверить</h2></div>
+        <ul>
+          <li>Разрешает ли сторонний сервис передачу или перепродажу аккаунтов.</li>
+          <li>Есть ли у продавца право передавать доступ и подтверждённый источник аккаунта.</li>
+          <li>Что именно считается предоставлением услуги и какие условия возврата применяются.</li>
+          <li>Не просят ли передавать личные пароли, коды подтверждения или платёжные данные.</li>
+        </ul>
+      </div>
+
+      <div class="demo-notice">
+        <strong>Учебный пример, а не юридическая гарантия.</strong><br>
+        Этот раздел показывает риски, связанные с обещаниями о доступе к сторонним аккаунтам. Он не подтверждает, что перепродажа аккаунтов разрешена, и не заменяет проверку правил платформы или юридическую консультацию. В данном Mini App нет реальной продажи, оплаты или передачи учётных данных.
+      </div>
+    </section>
+
+    <section class="panel" id="panel-agreement">
+      <div class="card">
+        <div class="card-head"><div class="icon">📄</div><div><h2>Пользовательское соглашение — Claude Market</h2><div class="term-date">Дата редакции: 26 октября 2026 г.</div></div></div>
+
+        <div class="term-section">
+          <h3>1. Общие положения</h3>
+          <p><b>1.1.</b> Настоящее Пользовательское соглашение (далее — «Соглашение») регулирует порядок использования онлайн-сервиса Claude Market в Telegram-боте @claudikfreemood_bot (далее — «Сервис»), предоставляемого Администрацией.</p>
+          <p><b>1.2.</b> Используя Сервис, включая запуск бота, регистрацию, оплату услуг или получение доступа к материалам, Пользователь подтверждает, что полностью ознакомился с условиями настоящего Соглашения и принимает их в полном объёме.</p>
+          <p><b>1.3.</b> В случае несогласия с условиями Соглашения Пользователь обязан прекратить использование Сервиса.</p>
+        </div>
+
+        <div class="term-section">
+          <h3>2. Характер услуг и цифровых товаров</h3>
+          <p><b>2.1.</b> Сервис предоставляет цифровые товары и услуги нематериального характера, включая, но не ограничиваясь: информационные материалы, обучающие программы, консультации, цифровые продукты и сервисные услуги.</p>
+          <p><b>2.2.</b> Материалы, предоставляемые через Сервис, могут включать:</p>
+          <ul>
+            <li>информацию из открытых источников;</li>
+            <li>авторские материалы Администрации и/или третьих лиц;</li>
+            <li>аналитические обзоры, подборки, рекомендации, структурированные данные.</li>
+          </ul>
+          <p><b>2.3.</b> Пользователь осознаёт и соглашается, что ценность цифровых товаров и услуг Сервиса заключается в систематизации, анализе, форме подачи, сопровождении, поддержке и обновлениях, а не в эксклюзивности отдельных фрагментов информации.</p>
+          <p><b>2.4.</b> Сервис не заявляет и не гарантирует уникальность, исключительность или недоступность отдельных элементов материалов вне Сервиса.</p>
+        </div>
+
+        <div class="term-section">
+          <h3>3. Отказ от гарантий и ответственности</h3>
+          <p><b>3.1.</b> Сервис предоставляется на условиях «AS IS» («как есть»).</p>
+          <p><b>3.2.</b> Администрация не гарантирует:</p>
+          <ul>
+            <li>соответствие Сервиса ожиданиям Пользователя;</li>
+            <li>достижение каких-либо финансовых, коммерческих, профессиональных или иных результатов;</li>
+            <li>бесперебойную и безошибочную работу Сервиса.</li>
+          </ul>
+          <p><b>3.3.</b> Администрация не несёт ответственности за:</p>
+          <ul>
+            <li>любые прямые или косвенные убытки, включая упущенную выгоду;</li>
+            <li>последствия применения Пользователем полученных материалов;</li>
+            <li>действия или бездействие третьих лиц;</li>
+            <li>временные технические сбои и ограничения доступа.</li>
+          </ul>
+          <p><b>3.4.</b> Все решения о применении материалов, рекомендаций и услуг принимаются Пользователем самостоятельно и на его риск.</p>
+        </div>
+
+        <div class="term-section">
+          <h3>4. Законность использования</h3>
+          <p><b>4.1.</b> Сервис не предназначен для поощрения, организации или содействия противоправной деятельности.</p>
+          <p><b>4.2.</b> Пользователь обязуется использовать Сервис исключительно в рамках применимого законодательства и правил третьих сторон.</p>
+          <p><b>4.3.</b> Ответственность за законность использования материалов и услуг Сервиса полностью возлагается на Пользователя.</p>
+        </div>
+
+        <div class="term-section">
+          <h3>5. Интеллектуальная собственность</h3>
+          <p><b>5.1.</b> Все материалы, размещённые в Сервисе, охраняются законодательством об интеллектуальной собственности.</p>
+          <p><b>5.2.</b> Пользователю запрещается копировать, распространять, перепродавать, передавать третьим лицам или иным образом использовать материалы Сервиса без разрешения правообладателя.</p>
+          <p><b>5.3.</b> Нарушение прав интеллектуальной собственности может повлечь ограничение доступа к Сервису без компенсации.</p>
+        </div>
+
+        <div class="term-section">
+          <h3>6. Ограничение доступа</h3>
+          <p><b>6.1.</b> Администрация вправе приостановить или ограничить доступ Пользователя к Сервису в случае:</p>
+          <ul>
+            <li>нарушения условий настоящего Соглашения;</li>
+            <li>выявления злоупотреблений;</li>
+            <li>требований законодательства или платёжных провайдеров.</li>
+          </ul>
+          <p><b>6.2.</b> Ограничение доступа не освобождает Пользователя от обязательств, возникших ранее.</p>
+          <p><b>6.3.</b> Администрация оставляет за собой право отказывать в обслуживании Пользователям, чьи действия могут создавать повышенные риски для Сервиса, платёжных провайдеров или третьих лиц.</p>
+        </div>
+
+        <div class="term-section">
+          <h3>7. Платежи и возвраты</h3>
+          <p><b>7.1.</b> Оплата услуг и цифровых товаров производится на условиях, указанных в Сервисе до момента оплаты.</p>
+          <p><b>7.2.</b> В связи с нематериальным характером цифровых товаров и услуг, возврат денежных средств после предоставления доступа не осуществляется, за исключением случаев, указанных ниже.</p>
+          <p><b>7.3.</b> Возврат средств возможен только если:</p>
+          <ul>
+            <li>услуга не была оказана по технической вине Сервиса;</li>
+            <li>доступ к цифровому товару фактически не был предоставлен.</li>
+          </ul>
+          <p><b>7.4.</b> Для рассмотрения вопроса о возврате Пользователь обязан обратиться в службу поддержки в течение 24 часов с момента оплаты.</p>
+          <p><b>7.5.</b> Решение о возврате принимается Администрацией индивидуально.</p>
+          <p><b>7.6.</b> Пользователь подтверждает, что обязуется не инициировать возврат платежа (chargeback) через платёжные системы без предварительного обращения в службу поддержки Сервиса.</p>
+        </div>
+
+        <div class="term-section">
+          <h3>8. Конфиденциальность</h3>
+          <p><b>8.1.</b> Администрация может собирать минимально необходимые технические данные для обеспечения работы Сервиса.</p>
+          <p><b>8.2.</b> Администрация принимает разумные меры для защиты данных, однако не гарантирует абсолютную безопасность передаваемой информации.</p>
+        </div>
+
+        <div class="term-section">
+          <h3>9. Изменение условий</h3>
+          <p><b>9.1.</b> Администрация вправе вносить изменения в настоящее Соглашение.</p>
+          <p><b>9.2.</b> Актуальная версия Соглашения публикуется в Сервисе.</p>
+          <p><b>9.3.</b> Продолжение использования Сервиса означает согласие Пользователя с обновлёнными условиями.</p>
+        </div>
+      </div>
+    </section>
+
+    <label class="check" for="agree">
+      <input id="agree" type="checkbox">
+      <span>Я ознакомился с разделом «Информация» и текстом пользовательского соглашения. Понимаю, что это учебный образец, а не проверенный юридический документ.</span>
+    </label>
+
+    <div class="actions">
+      <button class="action" id="accept" type="button" disabled>Подтвердить ознакомление и вернуться в бот</button>
+      <button class="action" id="close" type="button">Закрыть без продолжения</button>
+    </div>
+    <div id="status" role="status" aria-live="polite"></div>
+    <div class="footer">Claude Market · учебный интерфейс · 21 ноября 2026 г.<br>Дата редакции соглашения указана в самом документе.</div>
+  </main>
+
+  <script>
+    (function () {
+      const tg = window.Telegram && window.Telegram.WebApp;
+      const agree = document.getElementById('agree');
+      const accept = document.getElementById('accept');
+      const close = document.getElementById('close');
+      const status = document.getElementById('status');
+      const tabInfo = document.getElementById('tab-info');
+      const tabAgreement = document.getElementById('tab-agreement');
+      const panelInfo = document.getElementById('panel-info');
+      const panelAgreement = document.getElementById('panel-agreement');
+
+      function showTab(which) {
+        const info = which === 'info';
+        tabInfo.classList.toggle('active', info);
+        tabAgreement.classList.toggle('active', !info);
+        tabInfo.setAttribute('aria-selected', String(info));
+        tabAgreement.setAttribute('aria-selected', String(!info));
+        panelInfo.classList.toggle('active', info);
+        panelAgreement.classList.toggle('active', !info);
+      }
+
+      tabInfo.addEventListener('click', () => showTab('info'));
+      tabAgreement.addEventListener('click', () => showTab('agreement'));
+
+      if (tg) {
+        tg.ready();
+        tg.expand();
+      } else {
+        status.textContent = 'Для возврата в бот откройте эту страницу из Telegram.';
+      }
+
+      agree.addEventListener('change', function () {
+        accept.disabled = !agree.checked;
+      });
+
+      accept.addEventListener('click', function () {
+        if (!agree.checked) return;
+        if (!tg || typeof tg.sendData !== 'function') {
+          status.textContent = 'Не удалось связаться с Telegram. Откройте Mini App из бота.';
+          return;
+        }
+        accept.disabled = true;
+        status.textContent = 'Возвращаемся в бот…';
+        tg.sendData(JSON.stringify({
+          action: 'accept_terms',
+          version: '2026-11-demo-v1'
+        }));
+      });
+
+      close.addEventListener('click', function () {
+        if (tg && typeof tg.close === 'function') tg.close();
+        else status.textContent = 'Можно закрыть вкладку.';
+      });
+    })();
+  </script>
+</body>
+</html>
